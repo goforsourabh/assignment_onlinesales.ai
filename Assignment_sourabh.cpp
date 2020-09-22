@@ -27,7 +27,7 @@ int size(Node* node)
         ans= 0;  
     else
     {
-        for(int i=0 ; i<node->limit; i++)  
+        for(int i=0 ; i<=node->limit; i++)  
         {
         	ans+=size(node->children[i]);
 
@@ -36,6 +36,8 @@ int size(Node* node)
     node->size= ans+1;
     return node->size;
 }  
+
+
 void addnode( Node* root , string value)
 {
 	Node *latest = new Node(value);
@@ -44,13 +46,18 @@ void addnode( Node* root , string value)
 	root->children[index+1]= latest;
 	root->limit= index+1;
 }
+
+
+
 void maketree( Node* root, string str)
 {
 	int n = str.length();
 	int i=0 ;
 	int j=0;
+
 	string value="";
 	Node*ptr=root;
+
 	while(i<n)
 	{
 		if(str[i]!='^'|| i!=n-1)
@@ -63,33 +70,45 @@ void maketree( Node* root, string str)
 			{
 				value+=str[k];
 				
-
 			}
-			if(ptr->data==value)
+			if( ptr==NULL)
+			{
+				ptr= new Node(value);
+				continue;
+			}
+			if( ptr->data==value)
 			{
 				i++;
 				j=i;
+
 			}
 			else
 			{
 				bool find = false;
+
 				int lmt= ptr->limit;
-				for( int i=0 ; i< lmt ; i++)
+
+				for( int i=0 ; i<=lmt ; i++)
 				{
 					if( ptr->children[i]->data==value)
 					{
 						find ==true;
 						ptr =  ptr->children[i];
+						
 					}
 				}
 
 				if( find == false)
 				{
 					addnode( ptr, value);
+					
 				}
+
+				i++;
+				j=i;
 			}
 
-
+			
 			
 		}
 		else if( i==n-1)
@@ -98,8 +117,131 @@ void maketree( Node* root, string str)
 			{
 				value+=str[k];
 			}
+			if(ptr->data==value)
+			{
+				
+				j=i;
+				break;
+
+			}
+			else
+			{
+				bool find = false;
+
+				int lmt= ptr->limit;
+
+				for( int i=0 ; i<=lmt ; i++)
+				{
+					if( ptr->children[i]->data==value)
+					{
+						find ==true;
+						ptr =  ptr->children[i];
+						
+					}
+				}
+
+				if( find == false)
+				{
+					addnode( ptr, value);
+					
+				}
+
+				break;
+			}
 		}
 	}
+
+}
+
+int findsize( Node* root, string str)
+{
+	Node* ptr = root;
+	int n = str.length();
+	int i=0 ;
+	int j=0;
+
+	string value="";
+	
+	Node*ptr=root;
+
+	while(i<n)
+	{
+		if(str[i]!='^'|| i!=n-1)
+		{
+			i++;
+		}
+		else if(str[i]=='^')
+		{
+			for( int k=j ; k<=i ; k++)
+			{
+				value+=str[k];
+				
+			}
+			
+			if( ptr->data==value)
+			{
+				i++;
+				j=i;
+
+			}
+			else
+			{
+				
+
+				int lmt= ptr->limit;
+
+				for( int i=0 ; i<=lmt ; i++)
+				{
+					if( ptr->children[i]->data==value)
+					{
+						ptr =  ptr->children[i];
+						
+					}
+				}
+
+				i++;
+				j=i;
+			}
+
+			
+			
+		}
+		else if( i==n-1)
+		{
+			for( int k=j ; k<=i ; k++)
+			{
+				value+=str[k];
+			}
+			if(ptr->data==value)
+			{
+				
+				j=i;
+				return ptr->size;
+
+			}
+			else
+			{
+				
+
+				int lmt= ptr->limit;
+
+				for( int i=0 ; i<=lmt ; i++)
+				{
+					if( ptr->children[i]->data==value)
+					{
+						
+						ptr =  ptr->children[i];
+						
+					}
+				}
+
+				
+
+				return ptr->size;
+			}
+		}
+	}
+
 
 }
   
@@ -116,10 +258,18 @@ int main()
    {
    		string str;
    		cin>>str;
+   		Node*root= NULL;
+   		maketree( Node* root, string str);
+   	} 
 
-   		int len = str.length();
+   	int m;
+   	cin>>m;
 
+   for( int i=0 ;i< m ; i++)
+   {
+   		string strng;
+   		cin>> strng;
+   		cout<<findsize(  root,  strng)<<endl;
    } 
-    
     
 } 
